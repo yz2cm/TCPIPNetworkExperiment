@@ -393,8 +393,36 @@ char *mac_ntoa(u_char *d)
 	return str;
 }
 
+/*
+ * void print_ethernet(struct ether_header *eth);
+ * 機能
+ *   Ethernetヘッダの表示
+ * 表示
+ *   struct ether_header *rth; Ethernetヘッダ構造体へのポインタ
+ * 戻り値
+ *   なし
+ */
 void print_ethernet(struct ether_header *eth)
 {
+	int type = ntohs(eth->ether_type); /* Ethernetタイプ */
+
+	if(type <= 1500)
+		printf("IEEE 802.3 Ethernet Frame:\n");
+	else
+		printf("Ethernet Frame:\n");
+
+	printf("+-------------------------+-------------------------+-------------------------+\n");
+	printf("| Destination MAC Address: %17s|\n", mac_ntoa(eth->ether_dhost));
+	printf("+-------------------------+-------------------------+-------------------------+\n");
+	printf("| Source MAC Address:      %17s|\n", mac_ntoa(eth->ether_shost));
+	printf("+-------------------------+-------------------------+-------------------------+\n");
+
+	if(type < 1500)
+		printf("| Length:        %5u|\n", type);
+	else
+		printf("| Ethernet Type: 0x%04x|\n", type);
+
+	printf("+--------------------+\n");
 }
 
 void print_arp(struct ether_arp *arp)
