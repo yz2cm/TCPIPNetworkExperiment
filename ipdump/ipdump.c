@@ -372,9 +372,25 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+/*
+ * char *mac_ntoa(u_char *d)
+ * 機能
+ *   配列に格納されているMACアドレスを文字列に変換
+ *   static変数を利用するため、非リエントラント関数
+ * 引数
+ *   u_char *d;		MACアドレスが格納されている領域の先頭アドレス
+ * 戻り値
+ *   文字列表現のMACアドレス
+ */
 char *mac_ntoa(u_char *d)
 {
-	return NULL;
+#define MAX_MACSTR 50
+	static char str[MAX_MACSTR];
+
+	snprintf(str, MAX_MACSTR, "%02x:%02x:%02x:%02x:%02x:%02x",
+			d[0], d[1], d[2], d[3], d[4], d[5]);
+
+	return str;
 }
 
 void print_ethernet(struct ether_header *eth)
